@@ -61,3 +61,15 @@ def delete_client(client_id):
     cursor.close()
     connection.close()
     return jsonify({'message': 'Client deleted successfully.'}), 200
+
+# @clients_bp.route('/clients', methods=['POST'])
+# def create_client():
+#     client = request.json
+#     connection = create_db_connection()
+#     cursor = connection.cursor()
+#     query = "CALL create_client_proc(%s, %s)"
+#     cursor.execute(query, (client['name'], client['email']))
+#     connection.commit()
+#     cursor.close()
+#     connection.close()
+#     return jsonify({'message': 'Client created successfully.'}), 201
