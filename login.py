@@ -2,9 +2,10 @@ from conexion import create_db_connection
 from flask import Blueprint, jsonify, request, session, send_from_directory
 from validar_key import Validar_Token
 from werkzeug.security import generate_password_hash, check_password_hash
-from os import getcwd, path, remove
+from os import getcwd, path, remove, mkdir
 usuariosapi = Blueprint('Usuarios', __name__)
 PATH_FILE  = getcwd() + "/uploads/"
+CURRENT_DIRECTORY  = getcwd() + "/uploads/"
 
 @usuariosapi.route('/usuarios/crear', methods=['POST'])
 def crear_usuario():
@@ -118,4 +119,27 @@ def eliminar_archivo():
             remove(PATH_FILE + archivo)
         return jsonify({'message': 'Archivo Eliminado Exitosamente.'}), 201
     except OSError:
+        return jsonify({'message': 'No se Logro eliminar el Archivo.'}), 405
+    
+
+@usuariosapi.route('/usuarios/subircarpeta', methods=['POST'])
+def carpetas_archivo():
+    # api_key = request.headers.get('autorizacion')
+    # if not Validar_Token(api_key):
+    #     return jsonify({'mensaje': 'API Key inválida'}), 401
+    try:
+        archivos = request.files.getlist("files")
+        for file in archivos:
+            print(file)
+            directory_file = file.filename.split("/")
+            directory_file.pop()
+            directory_file = "/".join(directory_file)
+            print (directory_file)
+            if path.exists(CURRENT_DIRECTORY + directory_file) == False:
+                mkdir(path=CURRENT_DIRECTORY + directory_file)
+                file.save(CURRENT_DIRECTORY + file.filename)
+            else:
+                file.save(CURRENT_DIRECTORY + file.filename)
+        return jsonify({'message': 'Archivo Eliminado Exitosamente.'}), 201
+    except FileNotFoundError:
         return jsonify({'message': 'No se Logro eliminar el Archivo.'}), 405
