@@ -13,7 +13,7 @@ def get_clients():
         return jsonify({'mensaje': 'API Key inválida'}), 401
     connection = create_db_connection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM clientes"
+    query = "SELECT * FROM db_usuarios"
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -28,7 +28,7 @@ def get_client(client_id):
         return jsonify({'mensaje': 'API Key inválida'}), 401
     connection = create_db_connection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM clients WHERE id=%s"
+    query = "SELECT * FROM db_clientes WHERE id=%s"
     cursor.execute(query, (client_id,))
     result = cursor.fetchone()
     cursor.close()
@@ -44,7 +44,7 @@ def create_client():
     client = request.json
     connection = create_db_connection()
     cursor = connection.cursor()
-    query = "INSERT INTO clients (name, email) VALUES (%s, %s)"
+    query = "INSERT INTO db_clientes (name, email) VALUES (%s, %s)"
     cursor.execute(query, (client['name'], client['email']))
     connection.commit()
     cursor.close()
@@ -60,7 +60,7 @@ def update_client(client_id):
     client = request.json
     connection = create_db_connection()
     cursor = connection.cursor()
-    query = "UPDATE clients SET name=%s, email=%s WHERE id=%s"
+    query = "UPDATE db_clientes SET name=%s, email=%s WHERE id=%s"
     cursor.execute(query, (client['name'], client['email'], client_id))
     connection.commit()
     cursor.close()
@@ -75,7 +75,7 @@ def delete_client(client_id):
         return jsonify({'mensaje': 'API Key inválida'}), 401
     connection = create_db_connection()
     cursor = connection.cursor()
-    query = "DELETE FROM clients WHERE id=%s"
+    query = "DELETE FROM db_clientes WHERE id=%s"
     cursor.execute(query, (client_id,))
     connection.commit()
     cursor.close()

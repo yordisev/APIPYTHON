@@ -5,7 +5,7 @@ def create_db_connection():
         host="localhost",
         user="root",
         password="",
-        database="prestamos_db",
+        database="db_python",
         port=3306
     )
     return connection
